@@ -1,0 +1,63 @@
+{include file="common/meta"}
+<title>添加人员职务</title>
+
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>人员职务名称：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="adminName" name="adminName">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+{include file="common/footer"}
+<script type="text/javascript">
+    $(function(){
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form-admin-add").validate({
+            rules:{
+                adminName:{
+                    required:true,
+                    minlength:2,
+                    maxlength:16
+                }
+            },
+            onkeyup:false,
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+                $(form).ajaxSubmit(function (res) {
+                    if (res.status==1){
+                        layer.alert('添加成功',{
+                            icon:1,
+                            closeBtn:0
+                        },function () {
+                            //关闭弹窗
+                            setTimeout(function () {
+                                layer.closeAll();
+                                window.parent.location.reload();
+                            }, 500)
+                        });
+                    }else{
+                        layer.msg('创建失败!', {icon: 6,time:1000});
+                    }
+                    // var index = parent.layer.getFrameIndex(window.name);
+                    // parent.$('.btn-refresh').click();
+                    // parent.layer.close(index);
+                });
+
+            }
+        });
+    });
+</script>

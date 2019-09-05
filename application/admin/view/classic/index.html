@@ -1,0 +1,119 @@
+{include file="common/meta"}
+<title>班级列表</title>
+{include file="common/header"}
+{include file="common/menu"}
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+        <span class="c-gray en">&gt;</span>
+        班级管理
+        <span class="c-gray en">&gt;</span>
+        班级列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a> </nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+
+            <div class="cl pd-5 bg-1 bk-gray mt-20">
+                <span class="l">
+                    <a href="javascript:;" onclick="admin_add('添加班级','classic/add','800','300')" class="btn btn-primary radius">
+                        <i class="Hui-iconfont">&#xe600;</i> 添加班级
+                    </a>
+                </span>
+                <span class="r">共有数据：<strong>{$count}</strong> 条</span>
+            </div>
+            <table class="table table-border table-bordered table-bg table-hover table-sort">
+                <thead>
+                <tr class="text-c">
+                    <th width="25"><input type="checkbox" name="" value=""></th>
+                    <th width="40">ID</th>
+                    <th width="150">班级名称</th>
+                    <th width="90">所属院系</th>
+                    <th width="90">所属专业</th>
+                    <th width="100">创建时间</th>
+                    <th width="130">更新时间</th>
+                    <th width="100">是否已启用</th>
+                    <th width="100">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="list" id="vo" empty="没有数据"}
+                <tr class="text-c">
+                    <td><input type="checkbox" value="1" name=""></td>
+                    <td>{$vo->id}</td>
+                    <td>{$vo->class_name}</td>
+                    <td>{$vo->college->college_code}</td>
+                    <td>{$vo->major->major_code}</td>
+                    <td>{$vo->created_at} </td>
+                    <td>{$vo->update_at}</td>
+                    <td class="td-status">
+                        {if condition="$vo->is_use==1"}
+                        <span class="label label-success radius">已启用</span>
+                        {else/}
+                        <span class="label label-default radius">未启用</span>
+                        {/if}
+                    </td>
+                    <td class="td-manage">
+                        {if condition="$vo->is_use==1"}
+                        <a style="text-decoration:none" onClick="admin_stop(this,'{$vo->id}','2')" href="javascript:;" title="停用">
+                            <i class="Hui-iconfont">&#xe631;</i>
+                        </a>
+                        {else/}
+                        <a style="text-decoration:none" onClick="admin_stop(this,'{$vo->id}','1')" href="javascript:;" title="启用">
+                            <i class="Hui-iconfont">&#xe601;</i>
+                        </a>
+                        {/if}
+                        <a title="编辑" href="javascript:;" onclick="admin_edit('院系编辑','classic/edit?id={$vo->id}','800','400')" class="ml-5" style="text-decoration:none">
+                            <i class="Hui-iconfont">&#xe6df;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </article>
+    </div>
+</section>
+{include file="common/footer"}
+<script type="text/javascript">
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+            {"orderable":false,"aTargets":[0,6]}// 制定列不参与排序
+        ]
+    });
+    /*管理员-停用*/
+    function admin_stop(obj,id,type){
+        layer.confirm(type==2?'确认要停用吗？':'确认要启用吗？',function(index){
+            $.ajax({
+                type:'post',
+                url:'/admin/classic/change',
+                data:{id:id,type:type},
+                dataType:'json',
+                success:function (res) {
+                    if (res.status==1){
+                        if (type==2){
+                            layer.msg('已停用!',{icon: 5,time:1000});
+                            window.parent.location.reload();
+                        }else{
+                            layer.msg('已启用!', {icon: 6,time:1000});
+                            window.parent.location.reload();
+                        }
+                    } else{
+                        layer.msg('操作失败，请稍后尝试！',{icon:5,time:1000});
+                    }
+                },
+                fail:function (msg) {
+                    layer.msg('操作失败，请稍后尝试！',{icon:5,time:1000});
+                }
+            });
+        });
+    }
+    /*管理员-增加*/
+    function admin_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+    /*管理员修改*/
+    function admin_edit(title,url,w,h) {
+        layer_show(title,url,w,h);
+    }
+</script>

@@ -1,0 +1,58 @@
+{include file="common/meta"}
+<title>修改管理员</title>
+
+<article class="cl pd-20">
+    <form action="" method="post" class="form form-horizontal" id="form-admin-add">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="{$res->name}" placeholder="" id="adminName" name="adminName">
+            </div>
+        </div>
+        <input id="admin_id" name="admin_id" value="{$res->id}" type="hidden">
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                <button id="showTooltips" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</article>
+{include file="common/footer"}
+<script type="text/javascript">
+    //提交
+    $("#showTooltips").click(function(){
+        document.getElementById("showTooltips").className = "btn btn-primary radius";
+        setTimeout("document.getElementById('showTooltips').className = 'btn btn-primary radius'",1000);
+        $(this).attr("disabled","true");
+
+        let id = $("#admin_id").val(),adminName =$("#adminName").val();
+        if (adminName){
+            $.ajax({
+                type:"POST",
+                dateType:"json",
+                async : true,
+                url:"edit",
+                data:{id:id,adminName:adminName},
+                success: function (res) {
+                    if (res.status==1){
+                        layer.alert('修改成功',{
+                            icon:1,
+                            closeBtn:0
+                        },function () {
+                            //关闭弹窗
+                            setTimeout(function () {
+                                layer.closeAll();
+                                window.parent.location.reload();
+                            }, 500)
+                        });
+                    }else{
+                        layer.msg('修改失败!', {icon: 6,time:1000});
+                    }
+                },
+            });
+        }else{
+            layer.msg('未输入名称!', {icon: 6,time:1000});
+        }
+    });
+</script>
