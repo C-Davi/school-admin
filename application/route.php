@@ -40,6 +40,8 @@ Route::group('admin/login',function(){
     Route::get('/out', 'admin/Login/logout');
 });
 Route::post('admin/image/upload', 'admin/Image/upload');
+
+
 //管理员
 Route::group('admin/admin',function (){
     Route::get('','admin/admin/index');
@@ -65,6 +67,9 @@ Route::group('admin/students',function (){
     Route::post('/add','admin/students/create');
     Route::get('/edit','admin/students/edit');
     Route::post('/edit','admin/students/update');
+});
+Route::group('admin/teams',function (){
+   Route::get('','admin/teams/index');
 });
 //部门
 Route::group('admin/branch',function (){

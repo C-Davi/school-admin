@@ -23,4 +23,9 @@ class SchoolCollege extends Model
     {
         return self::all();
     }
+
+    public static function getSortAllPhone()
+    {
+    return self::where('is_use', 2)->order('id  desc')->select();
+    }
 }

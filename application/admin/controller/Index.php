@@ -59,4 +59,9 @@ class Index extends Controller
             var_dump('fail');
         }
     }
+    public function demo()
+    {
+        $res=\app\api\model\SchoolCollege::getSortAllPhone();
+        var_dump($res->getData());
+    }
 }
